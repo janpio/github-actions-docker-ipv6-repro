@@ -1,0 +1,13 @@
+name: Reproduction
+
+on:
+  push:
+  pull_request:
+   paths-ignore:
+
+
+jobs:
+  tests:
+    steps:
+      - uses: actions/checkout@v2
+      - run: docker-compose -f docker-compose.yml up --detach mysql
