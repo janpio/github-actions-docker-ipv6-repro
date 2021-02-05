@@ -9,4 +9,28 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - run: docker-compose -f docker-compose.yml up --detach mysql
+      - run: docker-compose -f docker-compose.yml up --detach mssql
+      - run: echo "Run tests with default Docker"
+      - name: test localhost
+        continue-on-error: true
+        run: /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
+      - name: test 127.0.0.1
+        continue-on-error: true
+        run: /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
+      - name: test ::1
+        continue-on-error: true
+        run: /opt/mssql-tools/bin/sqlcmd -S [::1] -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
+      
+      - run: echo "Downgrade Docker"
+      - run: sudo apt install moby-engine=19.03.14+azure-1 --allow-downgrades
+        
+      - run: echo "Run tests with downgraded Docker"
+      - name: test localhost
+        continue-on-error: true
+        run: /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
+      - name: test 127.0.0.1
+        continue-on-error: true
+        run: /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
+      - name: test ::1
+        continue-on-error: true
+        run: /opt/mssql-tools/bin/sqlcmd -S [::1] -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
