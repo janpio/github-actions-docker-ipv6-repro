@@ -15,7 +15,11 @@ jobs:
         
       - name: Start MSSQL
         run: docker-compose -f docker-compose.yml up --detach mssql
-        
+      - name: Sleep for 30 seconds
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '30s'
+
       - run: echo "Run tests with original Docker"
       - name: test localhost
         continue-on-error: true
@@ -28,13 +32,18 @@ jobs:
         run: /opt/mssql-tools/bin/sqlcmd -S [::1] -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
       
       - run: echo "Downgrade Docker"
+      - run: docker-compose down
       - run: sudo apt install moby-engine=19.03.14+azure-1 --allow-downgrades
       - name: Downgraded Docker Version
         run: docker version
       
       - name: Start MSSQL
         run: docker-compose -f docker-compose.yml up --detach mssql
-        
+      - name: Sleep for 30 seconds
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '30s'
+  
       - run: echo "Run tests with downgraded Docker"
       - name: test localhost
         continue-on-error: true
