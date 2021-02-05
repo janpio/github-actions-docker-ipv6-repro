@@ -1,22 +1,16 @@
 version: '3.7'
 services:
 
-  mysql:
-    image: mysql:8.0
-    command: --default-authentication-plugin=mysql_native_password
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=tests
-      - MYSQL_USER=prisma
-      - MYSQL_PASSWORD=prisma
-    # https://stackoverflow.com/questions/55559386/how-to-fix-mbind-operation-not-permitted-in-mysql-error-log
-    cap_add:
-      - SYS_NICE # CAP_SYS_NICE
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Pr1sm4_Pr1sm4
     volumes:
-      - mysql:/var/lib/mysql
+      - mssql:/var/opt/mssql
     ports:
-      - '3306:3306'
+      - '1433:1433'
  
 volumes:
-  mysql:
+  mssql:
