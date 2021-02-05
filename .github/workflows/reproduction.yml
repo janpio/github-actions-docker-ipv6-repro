@@ -35,11 +35,6 @@ jobs:
         run: npx prisma introspect
         env:
           DATABASE_URL: sqlserver://127.0.0.1:1433;database=prisma-demo;user=SA;password=Pr1sm4_Pr1sm4;trustServerCertificate=true;encrypt=true
-      - name: introspect ::1
-        continue-on-error: true
-        run: npx prisma introspect
-        env:
-          DATABASE_URL: sqlserver://[::1]:1433;database=prisma-demo;user=SA;password=Pr1sm4_Pr1sm4;trustServerCertificate=true;encrypt=true
 
       - run: echo "Downgrade Docker"
       - run: docker-compose down
@@ -65,8 +60,3 @@ jobs:
         run: npx prisma introspect
         env:
           DATABASE_URL: sqlserver://127.0.0.1:1433;database=prisma-demo;user=SA;password=Pr1sm4_Pr1sm4;trustServerCertificate=true;encrypt=true
-      - name: introspect ::1
-        continue-on-error: true
-        run: npx prisma introspect
-        env:
-          DATABASE_URL: sqlserver://[::1]:1433;database=prisma-demo;user=SA;password=Pr1sm4_Pr1sm4;trustServerCertificate=true;encrypt=true
