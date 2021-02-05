@@ -9,8 +9,14 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - run: docker-compose -f docker-compose.yml up --detach mssql
-      - run: echo "Run tests with default Docker"
+      
+      - name: Original Docker Version
+        run: docker version
+        
+      - name: Start MSSQL
+        run: docker-compose -f docker-compose.yml up --detach mssql
+        
+      - run: echo "Run tests with original Docker"
       - name: test localhost
         continue-on-error: true
         run: /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
@@ -23,6 +29,11 @@ jobs:
       
       - run: echo "Downgrade Docker"
       - run: sudo apt install moby-engine=19.03.14+azure-1 --allow-downgrades
+      - name: Downgraded Docker Version
+        run: docker version
+      
+      - name: Start MSSQL
+        run: docker-compose -f docker-compose.yml up --detach mssql
         
       - run: echo "Run tests with downgraded Docker"
       - name: test localhost
