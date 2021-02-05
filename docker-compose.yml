@@ -11,7 +11,7 @@ services:
       - mssql:/var/opt/mssql
     ports:
       - '1433:1433'
-   healthcheck:
+    healthcheck:
       test: [ "CMD", "sqlcmd", "-U", "sa", "-P", "Pr1sm4_Pr1sm4", "-Q", "select 1" ]
       interval: 1s
       retries: 20
