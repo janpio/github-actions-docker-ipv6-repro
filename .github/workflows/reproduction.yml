@@ -23,17 +23,6 @@ jobs:
         uses: jakejarvis/wait-action@master
         with:
           time: '30s'
-
-      - run: echo "Run sqlcmd with original Docker"
-      - name: test localhost
-        continue-on-error: true
-        run: /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
-      - name: test 127.0.0.1
-        continue-on-error: true
-        run: /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
-      - name: test ::1
-        continue-on-error: true
-        run: /opt/mssql-tools/bin/sqlcmd -S [::1] -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
       
       - run: echo "Run prisma introspect with original Docker"
       - name: introspect localhost
@@ -64,17 +53,6 @@ jobs:
         uses: jakejarvis/wait-action@master
         with:
           time: '30s'
-  
-      - run: echo "Run tests with downgraded Docker"
-      - name: test localhost
-        continue-on-error: true
-        run: /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
-      - name: test 127.0.0.1
-        continue-on-error: true
-        run: /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
-      - name: test ::1
-        continue-on-error: true
-        run: /opt/mssql-tools/bin/sqlcmd -S [::1] -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
 
       - run: echo "Run prisma introspect with downgraded Docker"
       - name: introspect localhost
