@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - run: npm install
       
       - name: Original Docker Version
         run: docker version
@@ -20,7 +24,7 @@ jobs:
         with:
           time: '30s'
 
-      - run: echo "Run tests with original Docker"
+      - run: echo "Run sqlcmd with original Docker"
       - name: test localhost
         continue-on-error: true
         run: /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
@@ -31,6 +35,23 @@ jobs:
         continue-on-error: true
         run: /opt/mssql-tools/bin/sqlcmd -S [::1] -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
       
+      - run: echo "Run prisma introspect with original Docker"
+      - name: introspect localhost
+        continue-on-error: true
+        run: npx prisma introspect
+        env:
+          DATABASE_URL: sqlserver:/localhost:1433;database=prisma-demo;user=SA;password=Pr1sm4_Pr1sm4;trustServerCertificate=true;encrypt=true
+      - name: introspect 127.0.0.1
+        continue-on-error: true
+        run: npx prisma introspect
+        env:
+          DATABASE_URL: sqlserver://127.0.0.1:1433;database=prisma-demo;user=SA;password=Pr1sm4_Pr1sm4;trustServerCertificate=true;encrypt=true
+      - name: introspect ::1
+        continue-on-error: true
+        run: npx prisma introspect
+        env:
+          DATABASE_URL: sqlserver://[::1];database=prisma-demo;user=SA;password=Pr1sm4_Pr1sm4;trustServerCertificate=true;encrypt=true
+
       - run: echo "Downgrade Docker"
       - run: docker-compose down
       - run: sudo apt install moby-engine=19.03.14+azure-1 --allow-downgrades
@@ -54,3 +75,20 @@ jobs:
       - name: test ::1
         continue-on-error: true
         run: /opt/mssql-tools/bin/sqlcmd -S [::1] -U SA -P Pr1sm4_Pr1sm4 -Q "SELECT 1"
+
+      - run: echo "Run prisma introspect with downgraded Docker"
+      - name: introspect localhost
+        continue-on-error: true
+        run: npx prisma introspect
+        env:
+          DATABASE_URL: sqlserver:/localhost:1433;database=prisma-demo;user=SA;password=Pr1sm4_Pr1sm4;trustServerCertificate=true;encrypt=true
+      - name: introspect 127.0.0.1
+        continue-on-error: true
+        run: npx prisma introspect
+        env:
+          DATABASE_URL: sqlserver://127.0.0.1:1433;database=prisma-demo;user=SA;password=Pr1sm4_Pr1sm4;trustServerCertificate=true;encrypt=true
+      - name: introspect ::1
+        continue-on-error: true
+        run: npx prisma introspect
+        env:
+          DATABASE_URL: sqlserver://[::1];database=prisma-demo;user=SA;password=Pr1sm4_Pr1sm4;trustServerCertificate=true;encrypt=true
