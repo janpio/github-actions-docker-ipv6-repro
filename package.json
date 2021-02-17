@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/janpio/github-actions-docker-ipv6-repro#readme",
   "dependencies": {
-    "prisma": "^2.16.0"
+    "prisma": "^2.18.0-dev.7"
   }
 }
